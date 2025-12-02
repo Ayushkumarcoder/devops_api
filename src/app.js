@@ -6,6 +6,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from '#routes/auth.routes.js';
 import securityMiddleware from './middleware/security.middleware.js';
+import usersRoutes from '#routes/users.routes.js';
 
 const app = express();
 app.use(helmet());
@@ -20,15 +21,7 @@ app.use(
   })
 );
 
-//security middleware using arcjet
-app.use(securityMiddleware);
-
-app.get('/', (req, res) => {
-    logger.info('Root endpoint accessed- api get request');
-  res.status(200).send('Hello from devops api (app.js)');
-});
-
-
+// Health check endpoint (before security middleware to avoid bot detection)
 app.get('/health', (req, res) => {
   res
     .status(200)
@@ -39,10 +32,19 @@ app.get('/health', (req, res) => {
     });
 });
 
+//security middleware using arcjet (applied after health check)
+app.use(securityMiddleware);
+
+app.get('/', (req, res) => {
+    logger.info('Root endpoint accessed- api get request');
+  res.status(200).send('Hello from devops api (app.js)');
+});
+
 app.get('/api', (req, res) => {
   res.status(200).json({ message: 'devops-API is running!' });
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', usersRoutes);
 
 export default app;
