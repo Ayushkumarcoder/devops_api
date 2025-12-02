@@ -23,20 +23,18 @@ app.use(
 
 // Health check endpoint (before security middleware to avoid bot detection)
 app.get('/health', (req, res) => {
-  res
-    .status(200)
-    .json({
-      status: 'OK',
-      timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
-    });
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
 });
 
 //security middleware using arcjet (applied after health check)
 app.use(securityMiddleware);
 
 app.get('/', (req, res) => {
-    logger.info('Root endpoint accessed- api get request');
+  logger.info('Root endpoint accessed- api get request');
   res.status(200).send('Hello from devops api (app.js)');
 });
 

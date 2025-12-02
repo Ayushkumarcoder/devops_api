@@ -5,11 +5,9 @@ import { createUser, authenticateUser } from '#services/auth.service.js';
 import { jwttoken } from '#utils/jwt.js';
 import { cookies } from '#utils/cookies.js';
 
-
 export const signup = async (req, res, next) => {
-    try {
-
-        const validationResult = signupSchema.safeParse(req.body);
+  try {
+    const validationResult = signupSchema.safeParse(req.body);
 
     if (!validationResult.success) {
       return res.status(400).json({
@@ -17,7 +15,6 @@ export const signup = async (req, res, next) => {
         details: formatValidationError(validationResult.error),
       });
     }
-
 
     const { name, email, password, role } = validationResult.data;
 
@@ -41,10 +38,7 @@ export const signup = async (req, res, next) => {
         role: user.role,
       },
     });
-
-
-        
-    } catch (e) {
+  } catch (e) {
     logger.error('Signup error', e);
 
     if (e.message === 'User with this email already exists') {
@@ -53,8 +47,7 @@ export const signup = async (req, res, next) => {
 
     next(e);
   }
-}
-
+};
 
 export const signIn = async (req, res, next) => {
   try {
